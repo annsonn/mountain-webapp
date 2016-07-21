@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
+
 </head><body><div hidden="" by-vulcanize=""><script>(function () {
 function resolve() {
 document.body.removeAttribute('unresolved');
@@ -9651,24 +9652,22 @@ this.fire('dom-change');
 
 
 <dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
-
-  <style>
-    :host {
-      @apply(--layout-inline);
-      @apply(--layout-center-center);
-      position: relative;
-
-      vertical-align: middle;
-
-      fill: var(--iron-icon-fill-color, currentcolor);
-      stroke: var(--iron-icon-stroke-color, none);
-
-      width: var(--iron-icon-width, 24px);
-      height: var(--iron-icon-height, 24px);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+      }
+    </style>
   </template>
 
   <script>
@@ -13490,7 +13489,6 @@ this.fire('dom-change');
   })();
 </script>
 <script>
-
   /**
    * `Polymer.PaperRippleBehavior` dynamically implements a ripple
    * when the element has focus via pointer or keyboard.
@@ -13501,7 +13499,6 @@ this.fire('dom-change');
    * @polymerBehavior Polymer.PaperRippleBehavior
    */
   Polymer.PaperRippleBehavior = {
-
     properties: {
       /**
        * If true, the element will not produce a ripple effect when interacted
@@ -13602,19 +13599,15 @@ this.fire('dom-change');
         this._ripple.noink = noink;
       }
     }
-
   };
-
 </script>
 <script>
-
   /**
    * `Polymer.PaperInkyFocusBehavior` implements a ripple when the element has keyboard focus.
    *
    * @polymerBehavior Polymer.PaperInkyFocusBehavior
    */
   Polymer.PaperInkyFocusBehaviorImpl = {
-
     observers: [
       '_focusedChanged(receivedFocusFromKeyboard)'
     ],
@@ -13635,7 +13628,6 @@ this.fire('dom-change');
       ripple.classList.add('circle');
       return ripple;
     }
-
   };
 
   /** @polymerBehavior Polymer.PaperInkyFocusBehavior */
@@ -13645,7 +13637,6 @@ this.fire('dom-change');
     Polymer.PaperRippleBehavior,
     Polymer.PaperInkyFocusBehaviorImpl
   ];
-
 </script>
 <style is="custom-style">
 
@@ -14929,71 +14920,72 @@ this.fire('dom-change');
 
 
 <dom-module id="paper-scroll-header-panel" assetpath="../bower_components/paper-scroll-header-panel/">
-
-  <style>
-    :host {
-      display: block;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #mainContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-      -webkit-overflow-scrolling: touch;
-
-      overflow-x: hidden;
-      overflow-y: auto;
-
-      @apply(--paper-scroll-header-container);
-    }
-
-    #headerContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-    }
-
-    .bg-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    #headerBg {
-      @apply(--paper-scroll-header-panel-full-header);
-    }
-
-    #condensedHeaderBg {
-      @apply(--paper-scroll-header-panel-condensed-header);
-    }
-
-    #headerBg, #condensedHeaderBg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    #condensedHeaderBg {
-      opacity: 0;
-    }
-  </style>
   <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #mainContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        @apply(--paper-scroll-header-container); /* deprecated due to incorrect/confusing naming */
+        @apply(--paper-scroll-header-panel-container);
+      }
+
+      #headerContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        @apply(--paper-scroll-header-panel-header-container);
+      }
+
+      .bg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #headerBg {
+        @apply(--paper-scroll-header-panel-full-header);
+      }
+
+      #condensedHeaderBg {
+        @apply(--paper-scroll-header-panel-condensed-header);
+      }
+
+      #headerBg, #condensedHeaderBg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+      }
+
+      #condensedHeaderBg {
+        opacity: 0;
+      }
+    </style>
+
     <div id="mainContainer">
       <content id="mainContent" select=":not(paper-toolbar):not(.paper-header)"></content>
     </div>
@@ -15426,15 +15418,14 @@ this.fire('dom-change');
 
 
 <dom-module id="iron-a11y-announcer" assetpath="../bower_components/iron-a11y-announcer/">
-  <style>
-    :host {
-      display: inline-block;
-      position: fixed;
-      clip: rect(0px,0px,0px,0px);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: inline-block;
+        position: fixed;
+        clip: rect(0px,0px,0px,0px);
+      }
+    </style>
     <div aria-live$="[[mode]]">[[_text]]</div>
   </template>
 
@@ -15729,7 +15720,6 @@ Use `noOverlap` to position the element around another element without overlappi
      * Positions and fits the element into the `fitInto` element.
      */
     fit: function() {
-      this._discoverInfo();
       this.position();
       this.constrain();
       this.center();
@@ -15831,6 +15821,7 @@ Use `noOverlap` to position the element around another element without overlappi
         // needs to be centered, and it is done after constrain.
         return;
       }
+      this._discoverInfo();
 
       this.style.position = 'fixed';
       // Need border-box for margin/padding.
@@ -15891,6 +15882,8 @@ Use `noOverlap` to position the element around another element without overlappi
       if (this.horizontalAlign || this.verticalAlign) {
         return;
       }
+      this._discoverInfo();
+
       var info = this._fitInfo;
       // position at (0px, 0px) if not already positioned, so we can measure the natural size.
       if (!info.positionedBy.vertically) {
@@ -15945,6 +15938,8 @@ Use `noOverlap` to position the element around another element without overlappi
       if (this.horizontalAlign || this.verticalAlign) {
         return;
       }
+      this._discoverInfo();
+
       var positionedBy = this._fitInfo.positionedBy;
       if (positionedBy.vertically && positionedBy.horizontally) {
         // Already positioned.
@@ -21512,5 +21507,236 @@ module.exports = Array.isArray || function (arr) {
       }
     </style>
   </template>
+</dom-module>
+<dom-module id="welcome-page" assetpath="welcome-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Welcome!</h1>
+    <p>Things you'll need for this training:</p>
+    <ul>
+      <li>Climbing Gear</li>
+      <li>Water bottle</li>
+      <li>Socks or indoor shoes/flip flops</li>
+      <li>Skipping rope </li>
+      <li>A box of tissues for all the crying you will be doing</li>
+    </ul>
+    <p><strong>Note:</strong> Remember you will need to repeat the training for each week at least once!</p>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'welcome-page'
+      });
+    })();
+  </script>
+</dom-module>
+<dom-module id="week-one-page" assetpath="week-one-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Week 1</h1>
+    <h4>Skipping:	5	min.</h4>
+    <h4>Mobility:	5 min.</h4>
+    <h4>Warm	up	Bouldering:	10	min.</h4>
+    <h4>Projecting:	30	min.</h4>
+    <h4>Conditioning:	30	min.</h4>
+    <ul>
+      <li>Hanging	(engaged):	<strong>25 repetitions of knees to chin. 3 sets.</strong></li>
+      <li>Hanging	(engaged): <strong>10 repetitions of bent knee oblique	twists.	3	sets.</strong></li>
+      <li>Pull	ups	(assisted	if needed):	<strong>3	sets:	10 reps /	8 reps / 5 reps.</strong></li>
+      <li>Push	ups:	<strong>10 repetitions. 3 sets.</strong></li>
+    </ul>
+    <h4>Stretching:	5	min.</h4>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'week-one-page'
+      });
+    })();
+  </script>
+</dom-module>
+<dom-module id="week-two-page" assetpath="week-two-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Week 2</h1>
+    <h4>Skipping:	5	min.</h4>
+    <h4>Mobility:	5 min.</h4>
+    <h4>Warm up Bouldering:	10 min.</h4>
+    <h4>Projecting:	30	min.</h4>
+    <h4>Conditioning:	30	min.</h4>
+    <ul>
+      <li>Oblique Murdering:
+        Lay on your side, propped-up on your elbow, feet stacked, straight body.  Then, hold your top arm in front of your chest in an “L” position, with your elbow in the air, and raise the top knee to touch the elbow).
+        <strong>50 repetitions per side. 2 sets (200 total)</strong>
+      </li>
+      <li>Hanging	(engaged): <strong>20 repetitions of knees to chin. 3 sets.</strong></li>
+      <li>Hanging	(engaged): <strong>10 repetitions of bent knee oblique twists. 3 sets.</strong></li>
+      <li>Pull ups (As many as you can: <strong>3 sets</strong></li>
+      <li>Push ups (As many as you can): <strong>3 sets</strong></li>
+    </ul>
+    <h4>Stretching:	5	min.</h4>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'week-two-page'
+      });
+    })();
+  </script>
+</dom-module>
+<dom-module id="week-three-page" assetpath="week-three-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Week 3</h1>
+    <h4>Skipping:	5	min.</h4>
+    <h4>Mobility:	5 min.</h4>
+    <h4>Warm	up	Bouldering:	10	min.</h4>
+    <h4>Projecting:	30	min.</h4>
+    <h4>Conditioning:	30	min.</h4>
+    <ul>
+      <li>Oblique Blasting (Lay	on	your	side,	with	your	upper	body	off	the	edge	of	the	mats. Have	a	partner	support	you	legs	as	you	do	10	oblique	crunches	per	side.
+        <strong>3	sets	(that’s 30	per	side,	60	in	total).</strong>
+      </li>
+      <li>Knee to Chin Curls: <strong>20 repetitions	of	knees	to	chin. 3	sets.</strong></li>
+      <li>Hanging	(engaged): <strong>10 repetitions of bent knee oblique twists. 3 sets.</strong></li>
+      <li>Pull ups (As many as you can: <strong>3 sets</strong></li>
+      <li>Push ups (As many as you can): <strong>3 sets</strong></li>
+    </ul>
+    <h4>Stretching:	5	min.</h4>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'week-three-page'
+      });
+    })();
+  </script>
+</dom-module>
+<dom-module id="week-four-page" assetpath="week-four-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Week 4</h1>
+    <h4>Skipping:	5	min.</h4>
+    <h4>Mobility:	5 min.</h4>
+    <h4>Warm	up	Bouldering:	10	min.</h4>
+    <h4>Projecting:	30	min.</h4>
+    <h4>Conditioning:	30	min.</h4>
+    <ul>
+      <li>Oblique Blasting (Lay	on	your	side,	with	your	upper	body	off	the	edge	of	the	mats. Have	a	partner	support	you	legs	as	you	do	10	oblique	crunches	per	side.
+        <strong>3	sets	(that’s 30	per	side,	60	in	total).</strong>
+      </li>
+      <li>Pull ups (As many as you can): <strong>3 sets</strong></li>
+      <li>Campusing the Dragon: <strong>3 sets</strong></li>
+      <li>Push ups:	<strong>25</strong></li>
+    </ul>
+    <h4>Stretching:	5	min.</h4>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'week-four-page'
+      });
+    })();
+  </script>
+</dom-module>
+<dom-module id="week-five-page" assetpath="week-five-page/">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Week 5</h1>
+    <h4>Skipping:	5	min.</h4>
+    <h4>Mobility:	5 min.</h4>
+    <h4>Warm	up	Bouldering:	10	min.</h4>
+    <h4>Projecting:	30	min.</h4>
+    <h4>Conditioning:	30	min.</h4>
+    <ul>
+      <li>Oblique Blasting (Lay	on	your	side,	with	your	upper	body	off	the	edge	of	the	mats. Have	a	partner	support	you	legs	as	you	do	10	oblique	crunches	per	side.
+        <strong>3	sets	(that’s 30	per	side,	60	in	total).</strong>
+      </li>
+      <li>Pull ups:	As many as you can.
+        <strong>3 sets</strong>
+      </li>
+      <li>Campusing the Dragon: <strong>3 sets</strong></li>
+      <li>Push ups:	<strong>25</strong></li>
+    </ul>
+    <h4>Stretching:	5	min.</h4>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'week-five-page'
+      });
+    })();
+  </script>
 </dom-module>
 </div></body></html>
