@@ -1,14 +1,27 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <dom-module id="mountain-data">
     <template>
 
         <firebase-query
                 id="query"
-                path="/user/[[uid]]"
+                path="[[userLocation]]"
                 data="{{data}}">
         </firebase-query>
+
+        <app-indexeddb-mirror
+                session="[[uid]]"
+                key="mountain"
+                data="{{data}}"
+                persisted-data="{{trainingData}}">
+        </app-indexeddb-mirror>
+
+        <firebase-document
+                path="[[userLocation]]"
+                data="{{trainingData}}">
+        </firebase-document>
 
     </template>
 
@@ -21,16 +34,25 @@
 
                 properties: {
                     user: {
-                        notify: true
+                        notify: true,
+                        observer: '_userUpdated'
                     },
-                    data: {
+                    trainingData: {
                         type: Object,
-                        observer: 'dataChanged'
+                        observer: '_dataChanged'
                     }
                 },
 
-                dataChanged: function (newData, oldData) {
+                _userUpdated: function (user) {
+                    if (user) {
+                        this.userLocation = '/users/' + user.uid;
+                        console.log(this.userLocation);
+                    }
+                },
+
+                _dataChanged: function (newData, oldData) {
                     console.log('dataChanged', newData, oldData);
+                    //this.$.document.save(this.notesPath)
                 }
             });
         })();
