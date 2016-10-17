@@ -1,0 +1,38 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+<dom-module id="mountain-data">
+    <template>
+
+        <firebase-query
+                id="query"
+                path="/user/[[uid]]"
+                data="{{data}}">
+        </firebase-query>
+
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            Polymer({
+                is: 'mountain-data',
+
+                properties: {
+                    user: {
+                        notify: true
+                    },
+                    data: {
+                        type: Object,
+                        observer: 'dataChanged'
+                    }
+                },
+
+                dataChanged: function (newData, oldData) {
+                    console.log('dataChanged', newData, oldData);
+                }
+            });
+        })();
+    </script>
+</dom-module>
