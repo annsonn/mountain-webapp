@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="mountain-auth.html">
 <link rel="import" href="mountain-data.html">
 <link rel="import" href="my-icons.html">
@@ -65,6 +66,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-app
+        auth-domain="mountain-training-60089.firebaseapp.com"
+        database-url="https://mountain-training-60089.firebaseio.com"
+        storage-bucket="mountain-training-60089.appspot.com"
+        api-key="AIzaSyDTmXhYb75IY7Z2s-zulrDZDF7GgcJt9ys">
+    </firebase-app>
+
     <mountain-auth id="auth" user="{{user}}"></mountain-auth>
     <mountain-data id="trainingData" user="{{user}}" trainingData="{{trainingData}}"></mountain-data>
 
@@ -80,9 +88,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer>
         <app-toolbar>Welcome [[user.displayName]]</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
+          <a name="home" href="/home">Home</a>
+          <a name="benchmark" href="/benchmark">Benchmark</a>
+          <a name="circuit" href="/circuit">Circuit</a>
         </iron-selector>
       </app-drawer>
 
@@ -99,12 +107,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
-            fallback-selection="view404"
+            fallback-selection="error"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
+          <home-page name="home"></home-page>
+          <benchmark-page name="benchmark"></benchmark-page>
+          <circuit-page name="circuit"></circuit-page>
+          <error-page name="error"></error-page>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -131,12 +139,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        this.page = page || 'home';
       },
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl(page + '-page.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
