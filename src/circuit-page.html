@@ -9,29 +9,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="circuit-page">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
 
         padding: 10px;
       }
+
+      h2, h3 {
+        line-height: 20px;
+      }
+
+      .text-right {
+        text-align: right;
+      }
     </style>
 
     <div class="card">
-      <div class="circle">3</div>
       <h1>Circuit Training</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <p>The goal of this training is to do some high intensity condition that help target a wide range of the musceles you use when climbing.</p>
+      <p>It is recommended that you do this with a partner and do this circuit at least twice!</p>
+      <p>You will be doing the following excerises for one minute straight and then be on a one minute rest in between excerises.</p>
     </div>
+    <template is="dom-repeat" items="{{excerises}}">
+        <div class="card">
+          <div class="layout horizontal">
+            <div class="flex">
+              <h2>{{item}}</h2>
+            </div>
+            <div class="flex text-right">
+              <h3>1 min.</h3>
+            </div>
+          </div>
+        </div>
+    </template>
+    <paper-fab class="page-fab blue" icon="menu"></paper-fab>
+
   </template>
 
   <script>
     Polymer({
-      is: 'circuit-page'
+      is: 'circuit-page',
+      properties: {
+        excerises: {
+          type: Array,
+          value: ['Battle Ropes', 'Pushups', 'Shoulder Flys', 'Pinch Grips', 'Blue Balls', 'Quick Step', 'Curls', 'Forearm Hell', 'Knee Ups', 'Pull Ups']
+        }
+      }
     });
   </script>
 </dom-module>
