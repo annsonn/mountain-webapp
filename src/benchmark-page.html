@@ -75,6 +75,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: ['pullups', 'pushups', 'blue balls']
         },
 
+        interval: {
+          type: Number,
+          value: 120,
+        },
+
         sets: {
           type: Array,
           value: [1,2,3]
@@ -83,6 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         progress: {
           type: Object
         },
+
         animating: {
           type: Boolean,
           value: false
@@ -105,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.timer = performance.now();
 
         this.progress.value = 0;
-        this.progress.max = 100; // 1 = 0.1s
+        this.progress.max = this.interval*10; // 1 = 0.1s
         this.progress.step = 1;
         if (!this.animating) {
           this._nextProgress();
@@ -121,8 +127,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } else {
           this.animating = false;
           this._removeCard();
-          
-          console.log(performance.now() - this.timer);
           return;
         }
 
