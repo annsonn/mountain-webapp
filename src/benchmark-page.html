@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .progress {
         display: none;
+        width: 100%;
       }
 
       [started] .progress {
@@ -86,22 +87,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false
         }
+        
       },
 
       start: function() {
         var container = this.$.exercises;
-        var target = Polymer.dom(container).firstElementChild;
+        var target = Polymer.dom(container).querySelector('.card');
 
-        target.setAttribute('started', '');
-        console.log(target);
-
-        this.progress = Polymer.dom(target).firstElementChild;
-        this._startProgress();
+        if (target) {
+          target.setAttribute('started', '');
+          this.progress = Polymer.dom(target).firstElementChild;
+          this._startProgress();
+        }
       },
 
       _startProgress: function() {
+        this.timer = performance.now();
+
         this.progress.value = 0;
-        this.progress.max = 100;
+        this.progress.max = 100; // 1 = 0.1s
         this.progress.step = 1;
         if (!this.animating) {
           this._nextProgress();
@@ -117,8 +121,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } else {
           this.animating = false;
           this._removeCard();
+          
+          console.log(performance.now() - this.timer);
           return;
         }
+
+        setTimeout(this._nextFrame.bind(this), 100);
+      },
+
+      _nextFrame: function() {
         requestAnimationFrame(this._nextProgress.bind(this));
       },
   
@@ -130,6 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             { direction: 'right',
               target: target
             });
+        this.start();
       }
     });
   </script>
