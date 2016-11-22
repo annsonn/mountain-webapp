@@ -26,12 +26,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         line-height: 20px;
       }
 
-      .text-right {
-        text-align: right;
+      .card {
+        will-change: transform;
+        transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
       }
+
+      .card[removed] {
+        transform: scaleY(0);
+      }
+
     </style>
 
-    <div class="card">
+    <div id="intro" class="card">
       <h1>Circuit Training</h1>
       <p>The goal of this training is to do some high intensity condition that help target a wide range of the musceles you use when climbing.</p>
       <p>It is recommended that you do this with a partner and do this circuit at least twice!</p>
@@ -49,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
     </template>
-    <paper-fab class="page-fab blue" icon="menu"></paper-fab>
+    <paper-fab class="page-fab blue" icon="menu" on-tap="start"></paper-fab>
 
   </template>
 
@@ -61,6 +67,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array,
           value: ['Battle Ropes', 'Pushups', 'Shoulder Flys', 'Pinch Grips', 'Blue Balls', 'Quick Step', 'Curls', 'Forearm Hell', 'Knee Ups', 'Pull Ups']
         }
+      },
+
+      start: function() {
+        var introCard = this.$.intro;
+
+        introCard.setAttribute('removed', '')
+        console.log('start!', this.$.intro);
       }
     });
   </script>

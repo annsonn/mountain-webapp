@@ -9,29 +9,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="benchmark-page">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
 
         padding: 10px;
+        
+      }
+
+      h2, h3 {
+        line-height: 20px;
       }
     </style>
 
     <div class="card">
-      <div class="circle">2</div>
-      <h1>Benchmark</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <p>Use this benchmark as a way to track your progress and strength!</p>
     </div>
+
+    <iron-swipeable-container id="exercises">
+      <template is="dom-repeat" items="{{sets}}" as="set">
+        <template is="dom-repeat" items="{{exercises}}" as="exercise">
+          <div class="card" >
+            <div class="layout horizontal">
+              <div class="flex">
+                <h2>Set {{set}}: {{exercise}}</h2>
+              </div>
+              <div class="flex text-right">
+                <h3>2 min.</h3>
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+    </iron-swipeable-container>
+
+    <paper-fab class="page-fab blue" icon="menu" on-tap="start"></paper-fab>
+
   </template>
 
   <script>
     Polymer({
-      is: 'benchmark-page'
+      is: 'benchmark-page',
+      properties: {
+        exercises: {
+          type: Array,
+          value: ['pullups', 'pushups', 'blue balls']
+        },
+
+        sets: {
+          type: Array,
+          value: [1,2,3]
+        }
+      },
+
+      start: function() {
+        var container = this.$.exercises;
+        var target = Polymer.dom(container).firstElementChild;
+
+        Polymer.dom(container).removeChild(target);
+        container.fire('iron-swipe',
+            { direction: 'right',
+              target: target
+            });
+      }
     });
   </script>
 </dom-module>
