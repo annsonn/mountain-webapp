@@ -93,7 +93,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false
         }
-        
       },
 
       start: function() {
@@ -130,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return;
         }
 
-        setTimeout(this._nextFrame.bind(this), 100);
+        this._animationTimeout = setTimeout(this._nextFrame.bind(this), 100);
       },
 
       _nextFrame: function() {
@@ -145,6 +144,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             { direction: 'right',
               target: target
             });
+
+        clearTimeout(this._animationTimeout);
         this.start();
       }
     });
