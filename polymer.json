@@ -1,11 +1,11 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "src/mountain-app.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "src/home-page.html",
+    "src/benchmark-page.html",
+    "src/circuit-page.html",
+    "src/error-page.html"
   ],
   "sourceGlobs": [
    "src/**/*",
