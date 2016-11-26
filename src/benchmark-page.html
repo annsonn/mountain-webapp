@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
-<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/simple-timer/simple-timer.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="benchmark-page">
@@ -29,32 +29,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         line-height: 20px;
       }
 
-      .progress {
-        display: none;
-        width: 100%;
+      [swiped-card] {
+        transform: translate(200%);
       }
 
-      [started] .progress {
-        display: block;
-      }
     </style>
 
     <div class="card">
       <p>Use this benchmark as a way to track your progress and strength!</p>
     </div>
 
-    <iron-swipeable-container id="exercises">
+    <iron-swipeable-container id="exercises" disabled>
       <template is="dom-repeat" items="{{sets}}" as="set">
         <template is="dom-repeat" items="{{exercises}}" as="exercise">
           <div class="card">
-            <paper-progress class="progress"></paper-progress>
-
             <div class="layout horizontal">
               <div class="flex">
                 <h2>Set {{set}}: {{exercise}}</h2>
               </div>
               <div class="flex text-right">
-                <h3>2 min.</h3>
+                <h3><simple-timer class="timer" start-time="5"></simple-timer></h3>
               </div>
             </div>
           </div>
@@ -83,71 +77,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         sets: {
           type: Array,
           value: [1,2,3]
-        },
-
-        progress: {
-          type: Object
-        },
-
-        animating: {
-          type: Boolean,
-          value: false
         }
       },
 
       start: function() {
-        var container = this.$.exercises;
-        var target = Polymer.dom(container).querySelector('.card');
-
+        this._container = this.$.exercises;
+        var target = Polymer.dom(this._container).querySelector('.card');
         if (target) {
-          target.setAttribute('started', '');
-          this.progress = Polymer.dom(target).firstElementChild;
-          this._startProgress();
+          this.addEventListener('simple-timer-end', this._swipeCard); 
+          this.timer = Polymer.dom(target).querySelector('.timer');
+          this.timer.start();
         }
       },
 
-      _startProgress: function() {
-        this.timer = performance.now();
-
-        this.progress.value = 0;
-        this.progress.max = this.interval*10; // 1 = 0.1s
-        this.progress.step = 1;
-        if (!this.animating) {
-          this._nextProgress();
-        }
+      _swipeCard: function() {
+        var target = Polymer.dom(this._container).querySelector('.card');
+        target.setAttribute('swiped-card', '');
+        this.async(this._removeCard, 350);
       },
 
-      _nextProgress: function() {
-        this.animating = true;
-        var progress = this.progress;
-
-        if (progress.value < progress.max) {
-          progress.value += (progress.step || 1);
-        } else {
-          this.animating = false;
-          this._removeCard();
-          return;
-        }
-
-        this._animationTimeout = setTimeout(this._nextFrame.bind(this), 100);
-      },
-
-      _nextFrame: function() {
-        requestAnimationFrame(this._nextProgress.bind(this));
-      },
-  
       _removeCard: function() {
-        var container = this.$.exercises;
-        var target = Polymer.dom(container).firstElementChild;
-        Polymer.dom(container).removeChild(target);
-        container.fire('iron-swipe',
-            { direction: 'right',
-              target: target
-            });
-
-        clearTimeout(this._animationTimeout);
+        var target = Polymer.dom(this._container).querySelector('.card');
+        Polymer.dom(this._container).removeChild(target);
         this.start();
       }
+
     });
   </script>
 </dom-module>
