@@ -42,7 +42,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .card[timer-started] {
-        animation: colorchange 120s; 
         transition: background 0.3s ease-in;
       }
 
@@ -104,9 +103,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._container = this.$.exercises;
         var target = Polymer.dom(this._container).querySelector('.card');
         if (target) {
-          target.setAttribute('timer-started', '');
           this.addEventListener('simple-timer-end', this._swipeCard); 
           this.timer = Polymer.dom(target).querySelector('.timer');
+          
+          target.style.animation = 'colorchange ' + this.timer.startTime + 's';
+          target.setAttribute('timer-started', '');
           this.timer.start();
         }
       },
