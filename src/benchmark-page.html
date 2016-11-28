@@ -25,12 +25,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       }
 
-      h2, h3 {
+      h2, h3, h4 {
         line-height: 20px;
       }
 
       [swiped-card] {
         transform: translate(200%);
+      }
+
+      simple-timer {
+        display: inline-block;
+      }
+
+      .exercise-text {
+        text-transform: capitalize;
+      }
+
+      .card[timer-started] {
+        animation: colorchange 120s; 
+        transition: background 0.3s ease-in;
+      }
+
+      @keyframes colorchange
+      {
+        0%   {background: var(--paper-light-green-300);}
+        50%  {background: var(--paper-yellow-300);}
+        90%  {background: var(--paper-red-400);}
       }
 
     </style>
@@ -45,10 +65,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="card">
             <div class="layout horizontal">
               <div class="flex">
-                <h2>Set {{set}}: {{exercise}}</h2>
+                <h2>Set {{set}}: <span class="exercise-text">{{exercise}}</span></h2>
               </div>
               <div class="flex text-right">
-                <h3><simple-timer class="timer" start-time="120"></simple-timer></h3>
+                <h4>Time Remaining: <simple-timer class="timer" start-time="120"></simple-timer></h4>
               </div>
             </div>
           </div>
@@ -84,6 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._container = this.$.exercises;
         var target = Polymer.dom(this._container).querySelector('.card');
         if (target) {
+          target.setAttribute('timer-started', '');
           this.addEventListener('simple-timer-end', this._swipeCard); 
           this.timer = Polymer.dom(target).querySelector('.timer');
           this.timer.start();
