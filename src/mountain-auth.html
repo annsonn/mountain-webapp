@@ -94,6 +94,10 @@
                             });
                 },
 
+                handleError: function(error) {
+                    console.error('signIn Error', error);
+                },
+
                 signOut: function() {
                     var auth = document.getElementById('auth');
                     this.$.auth.signOut();
