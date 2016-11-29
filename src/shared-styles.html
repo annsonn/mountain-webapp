@@ -60,6 +60,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-fab-background: var(--paper-light-blue-500);
         --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
       }
+
+
+
+      h2, h3, h4 {
+        line-height: 20px;
+      }
+
+      [swiped-card] {
+        transform: translate(200%);
+      }
+
+      simple-timer {
+        display: inline-block;
+      }
+
+      .exercise-text {
+        text-transform: capitalize;
+      }
+
+      .card h2 {
+        transition: font-size 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card[timer-started] {
+        transition: background 0.3s ease-in;
+      }
+
+      .card[timer-started] h2 {
+        font-size: 25px;
+        color: black;
+      }
+
+      @keyframes colorchange
+      {
+        0%   {background: var(--paper-light-green-300);}
+        50%  {background: var(--paper-yellow-300);}
+        90%  {background: var(--paper-red-400);}
+      }
     </style>
   </template>
 </dom-module>

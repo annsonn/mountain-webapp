@@ -24,34 +24,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
         
       }
-
-      h2, h3, h4 {
-        line-height: 20px;
-      }
-
-      [swiped-card] {
-        transform: translate(200%);
-      }
-
-      simple-timer {
-        display: inline-block;
-      }
-
-      .exercise-text {
-        text-transform: capitalize;
-      }
-
-      .card[timer-started] {
-        transition: background 0.3s ease-in;
-      }
-
-      @keyframes colorchange
-      {
-        0%   {background: var(--paper-light-green-300);}
-        50%  {background: var(--paper-yellow-300);}
-        90%  {background: var(--paper-red-400);}
-      }
-
     </style>
 
     <div class="card">
@@ -101,27 +73,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       start: function() {
         this._container = this.$.exercises;
-        var target = Polymer.dom(this._container).querySelector('.card');
-        if (target) {
+        this._nextCard();
+      },
+
+      _removeIntroCard: function() {
+        Polymer.dom(this._container).removeChild(this.$.intro);
+        
+      },
+
+      _nextCard: function() {
+        this._currentCard = Polymer.dom(this._container).querySelector('.card');
+        if (this._currentCard) {
           this.addEventListener('simple-timer-end', this._swipeCard); 
-          this.timer = Polymer.dom(target).querySelector('.timer');
+          this.timer = Polymer.dom(this._currentCard).querySelector('.timer');
           
-          target.style.animation = 'colorchange ' + this.timer.startTime + 's';
-          target.setAttribute('timer-started', '');
+          this._currentCard.style.animation = 'colorchange ' + this.timer.startTime + 's';
+          this._currentCard.setAttribute('timer-started', '');
           this.timer.start();
         }
       },
 
       _swipeCard: function() {
-        var target = Polymer.dom(this._container).querySelector('.card');
-        target.setAttribute('swiped-card', '');
+        this._currentCard.setAttribute('swiped-card', '');
         this.async(this._removeCard, 350);
       },
 
       _removeCard: function() {
-        var target = Polymer.dom(this._container).querySelector('.card');
-        Polymer.dom(this._container).removeChild(target);
-        this.start();
+        Polymer.dom(this._container).removeChild(this._currentCard);
+        this._nextCard();
       }
 
     });
