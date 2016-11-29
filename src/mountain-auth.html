@@ -11,10 +11,6 @@
 <dom-module id="mountain-auth">
     <template>
         <style include="iron-flex iron-flex-alignment">
-            paper-dialog {
-                padding: 32px;
-            }
-
             .google-sign-in {
                 display: inline-block;
                 background: #4285f4;
@@ -63,22 +59,18 @@
                       entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <h2>Please sign in</h2>
-            <div>
-                <div>
-                    <paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
-                    <paper-input id="password" label="Password" required auto-validate minlength="6" type="password"></paper-input>
-                    <div class="layout horizontal">
-                        <paper-button class="flex" on-tap="emailSignIn">Sign In</paper-button>
-                        <paper-button class="flex" on-tap="createEmail">Create</paper-button>
-                    </div>
+            <div style="margin-top: 0;">
+                <paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
+                <paper-input id="password" label="Password" required auto-validate minlength="6" type="password"></paper-input>
+                <div class="layout horizontal" style="margin-top: 15px">
+                    <paper-button class="flex" raised on-tap="signIn">Sign In/Create</paper-button>
                 </div>
-                <hr>
-                <div class="google-sign-in"
+                <!--<div class="google-sign-in"
                      tabindex="0"
-                     on-tap="signIn">
+                     on-tap="googleSignIn">
                     <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
-                </div>
+                </div>-->
             </div>
         </paper-dialog>
     </template>
@@ -96,32 +88,36 @@
                     }
                 },
 
-                emailSignIn: function() {
-                    this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                        .then(this._handleSuccess)
-                        .catch(this._handleError);
+                signIn: function() {
+                    this._createEmail();
+                    this._emailSignIn();
                 }, 
 
-                createEmail: function() {
+                _emailSignIn: function() {
+                    this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                        .then(this.handleSuccess)
+                        .catch(this.handleError);
+                },
+
+                _createEmail: function() {
                     this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                        .then(this._handleSuccess)
-                        .catch(this._handleError);
+                        .then(this.handleSuccess)
+                        .catch(this.handleError);
                 },
 
-                signIn: function() {
+                googleSignIn: function() {
                     this.$.auth.signInWithPopup()
-                        .then(this._handleSuccess)
-                        .catch(this._handleError);
+                        .then(this.handleSuccess)
+                        .catch(this.handleError);
                 },
 
-                _handleSuccess: function(response) {
+                handleSuccess: function(response) {
                     // successful authentication response here
-                    console.info('signIn Success', response);
                     this.user = response.user;
                 },
 
-                _handleError: function(error) {
-                    console.error('signIn Error', error);
+                handleError: function(error) {
+                    console.error(error.code);
                 },
 
                 signOut: function() {
