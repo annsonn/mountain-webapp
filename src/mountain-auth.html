@@ -1,12 +1,16 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
 
 <dom-module id="mountain-auth">
     <template>
-        <style>
+        <style include="iron-flex iron-flex-alignment">
             paper-dialog {
                 padding: 32px;
             }
@@ -44,12 +48,14 @@
                 font-family: 'Roboto', sans-serif;
             }
         </style>
-        
 
-        <firebase-auth id="auth"
-                       user="{{user}}"
-                       provider="google"
-                       on-error="handleError">
+        <firebase-app 
+            auth-domain="mountain-5aafe.firebaseapp.com"
+            database-url="https://mountain-5aafe.firebaseio.com"
+            storage-bucket="mountain-5aafe.appspot.com"
+            api-key="AIzaSyD3KXmsaX_XaFTu2apejJjTJv6jJIUm01A">
+        </firebase-app>
+        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
         </firebase-auth>
 
         <paper-dialog modal
@@ -58,6 +64,15 @@
                       exit-animation="fade-out-animation">
             <h2>Please sign in</h2>
             <div>
+                <div>
+                    <paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
+                    <paper-input id="password" label="Password" required auto-validate minlength="6" type="password"></paper-input>
+                    <div class="layout horizontal">
+                        <paper-button class="flex" on-tap="emailSignIn">Sign In</paper-button>
+                        <paper-button class="flex" on-tap="createEmail">Create</paper-button>
+                    </div>
+                </div>
+                <hr>
                 <div class="google-sign-in"
                      tabindex="0"
                      on-tap="signIn">
@@ -81,25 +96,35 @@
                     }
                 },
 
-                signIn: function() {
-                    this.$.auth.signInWithPopup()
-                            .then(function(response) {
-                                // successful authentication response here
-                                console.info('signIn Success', response);
-                                this.user = response.user;
-                            })
-                            .catch(function(error) {
-                                // unsuccessful authentication response here});
-                                console.error('signIn Error', error);
-                            });
+                emailSignIn: function() {
+                    this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                        .then(this._handleSuccess)
+                        .catch(this._handleError);
+                }, 
+
+                createEmail: function() {
+                    this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                        .then(this._handleSuccess)
+                        .catch(this._handleError);
                 },
 
-                handleError: function(error) {
+                signIn: function() {
+                    this.$.auth.signInWithPopup()
+                        .then(this._handleSuccess)
+                        .catch(this._handleError);
+                },
+
+                _handleSuccess: function(response) {
+                    // successful authentication response here
+                    console.info('signIn Success', response);
+                    this.user = response.user;
+                },
+
+                _handleError: function(error) {
                     console.error('signIn Error', error);
                 },
 
                 signOut: function() {
-                    var auth = document.getElementById('auth');
                     this.$.auth.signOut();
                     this.user = null;
                 }
