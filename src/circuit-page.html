@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="lodash.html">
@@ -25,8 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
 
-      #intro[hidden] {
-        display: none;
+      #startButton {
+        transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #startButton[swiped-down] {
+        transform: translateY(1000%);
       }
     </style>
 
@@ -37,7 +42,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <p>It is recommended that you do this with a partner and do this circuit at least twice!</p>
         <p>You will be doing the following excerises for one minute straight and then be on a one minute rest in between excerises.</p>
       </div>
-      
+      <div class="layout horizontal">
+        <paper-button id="startButton" class="blue flex" raised on-tap="start">START</paper-button>
+      </div>
       <template id="exercisesList" is="dom-repeat" items="{{exercises}}" as="exercise">
         <div class="card exercise-card">
           <div class="layout horizontal">
@@ -51,9 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </template>
     </div>
-
-    <paper-fab class="page-fab blue" icon="av:play-arrow" on-tap="start"></paper-fab>
-
   </template>
 
   <script>
@@ -70,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         duration: {
           type: Number,
-          value: 60
+          value: 1
         }
       },
 
@@ -78,12 +82,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._container = this.$.exercises;
 
         this.$.intro.setAttribute('swiped-card', '');
+        this.$.startButton.setAttribute('swiped-down', '');
         this.async(this._removeIntroCard, 350);
       },
 
       _removeIntroCard: function() {
         this.$.intro.setAttribute('hidden', '');
-        this.$.intro.removeAttribute('swiped-card');
+        this.$.startButton.setAttribute('hidden', '');
+
         this.set('exercises', _.clone(this._exercisesCopy));
         this.$.exercisesList.render();
         this._nextCard();
@@ -100,6 +106,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.timer.start();
         } else {
           this.$.intro.removeAttribute('hidden');
+          this.$.startButton.removeAttribute('hidden');
+          this.$.intro.removeAttribute('swiped-card');
+          this.$.startButton.removeAttribute('swiped-down');
         }
       },
 
