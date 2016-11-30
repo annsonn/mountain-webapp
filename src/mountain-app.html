@@ -78,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <mountain-auth id="auth" user="{{user}}"></mountain-auth>
-    <mountain-data id="trainingData" user="{{user}}" trainingData="{{trainingData}}"></mountain-data>
+    <mountain-data id="trainingData" user="{{user}}" training-data="{{trainingData}}"></mountain-data>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -115,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="error"
             role="main">
           <home-page name="home"></home-page>
-          <benchmark-page name="benchmark"></benchmark-page>
+          <benchmark-page training-data="{{trainingData}}" name="benchmark"></benchmark-page>
           <circuit-page name="circuit"></circuit-page>
           <error-page name="error"></error-page>
         </iron-pages>

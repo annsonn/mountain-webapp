@@ -11,7 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
 <link rel="import" href="shared-styles.html">
@@ -31,10 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p>Use this benchmark as a way to track your progress and strength!</p>
     </div>
 
-    <iron-swipeable-container id="exercises" disabled>
+    <div id="exercises">
       <template is="dom-repeat" items="{{sets}}" as="set">
         <template is="dom-repeat" items="{{exercises}}" as="exercise">
-          <div class="card">
+          <div class="card exercise">
             <div class="layout horizontal">
               <div class="flex">
                 <h2>Set {{set}}: <span class="exercise-text">{{exercise}}</span></h2>
@@ -46,7 +45,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </template>
       </template>
-    </iron-swipeable-container>
+    </div>
+    
 
     <paper-fab class="page-fab blue" icon="av:play-arrow" on-tap="start"></paper-fab>
 
@@ -79,7 +79,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _removeIntroCard: function() {
         Polymer.dom(this._container).removeChild(this.$.intro);
-        
       },
 
       _nextCard: function() {
@@ -91,10 +90,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._currentCard.style.animation = 'colorchange ' + this.timer.startTime + 's';
           this._currentCard.setAttribute('timer-started', '');
           this.timer.start();
+        } else {
+
         }
       },
 
       _swipeCard: function() {
+        this._currentCard.removeAttribute('timer-started');
         this._currentCard.setAttribute('swiped-card', '');
         this.async(this._removeCard, 350);
       },
