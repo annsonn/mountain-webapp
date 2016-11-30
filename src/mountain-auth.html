@@ -11,6 +11,10 @@
 <dom-module id="mountain-auth">
     <template>
         <style include="iron-flex iron-flex-alignment">
+            paper-dialog {
+                padding: 15px;
+            }
+
             .google-sign-in {
                 display: inline-block;
                 background: #4285f4;
@@ -51,7 +55,7 @@
             storage-bucket="mountain-5aafe.appspot.com"
             api-key="AIzaSyD3KXmsaX_XaFTu2apejJjTJv6jJIUm01A">
         </firebase-app>
-        <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+        <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}">
         </firebase-auth>
 
         <paper-dialog modal
@@ -59,18 +63,18 @@
                       entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <h2>Please sign in</h2>
-            <div style="margin-top: 0;">
-                <paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
+            <div>
+                <!--<paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
                 <paper-input id="password" label="Password" required auto-validate minlength="6" type="password" error-message="Minimum 6 letters required"></paper-input>
                 <div class="layout horizontal" style="margin-top: 15px">
                     <paper-button class="flex" raised on-tap="signIn">Sign In/Create</paper-button>
-                </div>
-                <!--<div class="google-sign-in"
+                </div>-->
+                <div class="google-sign-in"
                      tabindex="0"
                      on-tap="googleSignIn">
                     <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
-                </div>-->
+                </div>
             </div>
         </paper-dialog>
     </template>
@@ -84,26 +88,30 @@
 
                 properties: {
                     user: {
+                        type: Object,
                         notify: true
+                    },
+                    statusKnown: {
+                        type: Object
                     }
                 },
 
-                signIn: function() {
-                    this._createEmail();
-                    this._emailSignIn();
-                }, 
+                // signIn: function() {
+                //     this._createEmail();
+                //     this._emailSignIn();
+                // }, 
 
-                _emailSignIn: function() {
-                    this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                        .then(this.handleSuccess)
-                        .catch(this.handleError);
-                },
+                // _emailSignIn: function() {
+                //     this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                //         .then(this.handleSuccess)
+                //         .catch(this.handleError);
+                // },
 
-                _createEmail: function() {
-                    this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                        .then(this.handleSuccess)
-                        .catch(this.handleError);
-                },
+                // _createEmail: function() {
+                //     this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                //         .then(this.handleSuccess)
+                //         .catch(this.handleError);
+                // },
 
                 googleSignIn: function() {
                     this.$.auth.signInWithPopup()
