@@ -1,5 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
@@ -21,7 +21,7 @@
                 color: white;
                 width: 190px;
                 border-radius: 5px;
-                white-space 1: nowrap;
+                white-space: nowrap;
             }
 
             .google-sign-in:hover {
@@ -49,12 +49,8 @@
             }
         </style>
 
-        <firebase-app 
-            auth-domain="mountain-5aafe.firebaseapp.com"
-            database-url="https://mountain-5aafe.firebaseio.com"
-            storage-bucket="mountain-5aafe.appspot.com"
-            api-key="AIzaSyD3KXmsaX_XaFTu2apejJjTJv6jJIUm01A">
-        </firebase-app>
+
+        
         <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}">
         </firebase-auth>
 
