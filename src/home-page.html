@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="home-page">
@@ -21,15 +23,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
+    <firebase-query
+                id="query"
+                path="/users/[[user.uid]]/circuits"
+                data="{{circuits}}">
+    </firebase-query>
+
     <div class="card">
-      <div class="circle">1</div>
       <h1>Home</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
     </div>
 
     <div class="card">
       <h2>Benchmarks</h2>
+    </div>
+
+    <div class="card">
+      <h2>Circuit Training</h2>
+      <ul>
+        <template is="dom-repeat" items="{{circuits}}" as="circuit">
+          <li>{{circuit}}</li>
+        </template>
+      </ul>
     </div>
 
   </template>
