@@ -83,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         duration: {
           type: Number,
-          value: 1
+          value: 60
         }
       },
 
@@ -141,7 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _getDateStamp: function() {
         var dateStamp = new Date();
-        return dateStamp.getFullYear() + '-' + (dateStamp.getMonth()) + dateStamp.getDate();
+        return dateStamp.getFullYear() + '-' + (dateStamp.getMonth()) + "-" + dateStamp.getDate();
       }
 
     });
