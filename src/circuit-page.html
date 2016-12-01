@@ -140,8 +140,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _getDateStamp: function() {
-        Date date = new Date();
-        return date.getFullYear() + '-' + (date.getMonth()) + date.getDate();
+        var dateStamp = new Date();
+        return dateStamp.getFullYear() + '-' + (dateStamp.getMonth()) + dateStamp.getDate();
       }
 
     });
