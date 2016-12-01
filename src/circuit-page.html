@@ -12,8 +12,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lodash.html">
 
 <dom-module id="circuit-page">
   <template>
@@ -22,6 +24,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
 
         padding: 10px;
+      }
+
+      #startButton {
+        transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #startButton[swiped-down] {
+        transform: translateY(1000%);
       }
     </style>
 
@@ -32,23 +42,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <p>It is recommended that you do this with a partner and do this circuit at least twice!</p>
         <p>You will be doing the following excerises for one minute straight and then be on a one minute rest in between excerises.</p>
       </div>
-    
-      <template is="dom-repeat" items="{{exercises}}" as="exercise">
-        <div class="card">
+      <div class="layout horizontal">
+        <paper-button id="startButton" class="blue flex" raised on-tap="start">START</paper-button>
+      </div>
+      <template id="exercisesList" is="dom-repeat" items="{{exercises}}" as="exercise">
+        <div class="card exercise-card">
           <div class="layout horizontal">
             <div class="flex">
               <h2 class="exercise-text">{{exercise}}</h2>
             </div>
             <div class="flex text-right">
-              <h4>Time Remaining: <simple-timer class="timer" start-time="60"></simple-timer></h4>
+              <h4>Time Remaining: <simple-timer class="timer" start-time="{{duration}}"></simple-timer></h4>
             </div>
           </div>
         </div>
       </template>
     </div>
-
-    <paper-fab class="page-fab blue" icon="av:play-arrow" on-tap="start"></paper-fab>
-
   </template>
 
   <script>
@@ -57,7 +66,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         exercises: {
           type: Array,
+          value: []
+        },
+        _exercisesCopy: {
+          type: Array,
           value: ['Battle Ropes', 'Pushups', 'Shoulder Flys', 'Pinch Grips', 'Blue Balls', 'Quick Step', 'Curls', 'Forearm Hell', 'Knee Ups', 'Pull Ups']
+        },
+        duration: {
+          type: Number,
+          value: 1
         }
       },
 
@@ -65,16 +82,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._container = this.$.exercises;
 
         this.$.intro.setAttribute('swiped-card', '');
+        this.$.startButton.setAttribute('swiped-down', '');
         this.async(this._removeIntroCard, 350);
       },
 
       _removeIntroCard: function() {
-        Polymer.dom(this._container).removeChild(this.$.intro);
+        this.$.intro.setAttribute('hidden', '');
+        this.$.startButton.setAttribute('hidden', '');
+
+        this.set('exercises', _.clone(this._exercisesCopy));
+        this.$.exercisesList.render();
         this._nextCard();
       },
 
       _nextCard: function() {
-        this._currentCard = Polymer.dom(this._container).querySelector('.card');
+        this._currentCard = Polymer.dom(this._container).querySelector('.exercise-card');
         if (this._currentCard) {
           this.addEventListener('simple-timer-end', this._swipeCard); 
           this.timer = Polymer.dom(this._currentCard).querySelector('.timer');
@@ -82,6 +104,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._currentCard.style.animation = 'colorchange ' + this.timer.startTime + 's';
           this._currentCard.setAttribute('timer-started', '');
           this.timer.start();
+        } else {
+          this.$.intro.removeAttribute('hidden');
+          this.$.startButton.removeAttribute('hidden');
+          this.$.intro.removeAttribute('swiped-card');
+          this.$.startButton.removeAttribute('swiped-down');
         }
       },
 
@@ -92,6 +119,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _removeCard: function() {
+        var exercise = this._currentCard.querySelector('.exercise-text').innerHTML;
+        this.splice('exercises', this.exercises.indexOf(exercise), 1);
         Polymer.dom(this._container).removeChild(this._currentCard);
         this._nextCard();
       }

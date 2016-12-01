@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
   <template>
@@ -56,12 +56,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         right: 1%;
       }
 
-      paper-fab.blue {
-        --paper-fab-background: var(--paper-light-blue-500);
-        --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+      paper-button.blue {
+        background-color: var(--paper-blue-500);
+        color: white;
       }
 
-
+      [hidden] {
+        display: none;
+      }
 
       h2, h3, h4 {
         line-height: 20px;

@@ -60,17 +60,17 @@
                       exit-animation="fade-out-animation">
             <h2>Please sign in</h2>
             <div>
-                <!--<paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
+                <paper-input id="email" label="Email" required auto-validate type="email"></paper-input>
                 <paper-input id="password" label="Password" required auto-validate minlength="6" type="password" error-message="Minimum 6 letters required"></paper-input>
                 <div class="layout horizontal" style="margin-top: 15px">
                     <paper-button class="flex" raised on-tap="signIn">Sign In/Create</paper-button>
-                </div>-->
-                <div class="google-sign-in"
+                </div>
+                <!--<div class="google-sign-in"
                      tabindex="0"
                      on-tap="googleSignIn">
                     <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
-                </div>
+                </div>-->
             </div>
         </paper-dialog>
     </template>
@@ -92,28 +92,28 @@
                     }
                 },
 
-                // signIn: function() {
-                //     this._createEmail();
-                //     this._emailSignIn();
-                // }, 
+                signIn: function() {
+                    this._createEmail();
+                    this._emailSignIn();
+                }, 
 
-                // _emailSignIn: function() {
-                //     this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                //         .then(this.handleSuccess)
-                //         .catch(this.handleError);
-                // },
-
-                // _createEmail: function() {
-                //     this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
-                //         .then(this.handleSuccess)
-                //         .catch(this.handleError);
-                // },
-
-                googleSignIn: function() {
-                    this.$.auth.signInWithPopup()
+                _emailSignIn: function() {
+                    this.$.auth.signInWithEmailAndPassword(this.$.email.value, this.$.password.value)
                         .then(this.handleSuccess)
                         .catch(this.handleError);
                 },
+
+                _createEmail: function() {
+                    this.$.auth.createUserWithEmailAndPassword(this.$.email.value, this.$.password.value)
+                        .then(this.handleSuccess)
+                        .catch(this.handleError);
+                },
+
+                // googleSignIn: function() {
+                //     this.$.auth.signInWithPopup()
+                //         .then(this.handleSuccess)
+                //         .catch(this.handleError);
+                // },
 
                 handleSuccess: function(response) {
                     // successful authentication response here
