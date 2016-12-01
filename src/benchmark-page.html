@@ -13,6 +13,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="benchmark-page">
@@ -25,6 +28,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       }
     </style>
+
+    <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
+    <firebase-query
+                id="query"
+                path="/users/[[user.uid]]/benchmarks"
+                data="{{benchmarks}}">
+        </firebase-query>
 
     <div class="card">
       <p>Use this benchmark as a way to track your progress and strength!</p>
@@ -43,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             </div>
           </div>
-        </template>
+        </template
       </template>
     </div>
     

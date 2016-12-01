@@ -25,7 +25,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="mountain-auth.html">
-<link rel="import" href="mountain-data.html">
 
 <dom-module id="mountain-app">
   <template>
@@ -85,7 +84,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-app>
 
     <mountain-auth id="auth" user="{{user}}"></mountain-auth>
-    <mountain-data id="trainingData" user="{{user}}" training-data="{{trainingData}}"></mountain-data>
 
     <app-location route="{{route}}"></app-location>
     <app-route
