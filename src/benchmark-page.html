@@ -9,13 +9,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
-
+<link rel="import" href="lodash.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="benchmark-page">
@@ -23,43 +23,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
-
         padding: 10px;
-        
+      }
+
+      #startButton {
+        transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #startButton[swiped-down] {
+        transform: translateY(1000%);
       }
     </style>
 
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
-    <firebase-query
-                id="query"
-                path="/users/[[user.uid]]/benchmarks"
-                data="{{benchmarks}}">
-        </firebase-query>
-
-    <div class="card">
-      <p>Use this benchmark as a way to track your progress and strength!</p>
-    </div>
+    <firebase-query id="query" path="/users/[[user.uid]]/benchmarks" data="{{benchmarks}}"></firebase-query>
 
     <div id="exercises">
-      <template is="dom-repeat" items="{{sets}}" as="set">
+      <div id="intro" class="card">
+        <p>Use this benchmark as a way to track your progress and strength!</p>
+      </div>
+      <div class="layout horizontal">
+        <paper-button id="startButton" class="blue flex" raised on-tap="start">START</paper-button>
+      </div>
+
+      <template id="exercisesList" is="dom-repeat" items="{{exerciseSets}}" as="exerciseSet">
         <template is="dom-repeat" items="{{exercises}}" as="exercise">
-          <div class="card exercise">
+          <div class="card exercise-card">
             <div class="layout horizontal">
               <div class="flex">
-                <h2>Set {{set}}: <span class="exercise-text">{{exercise}}</span></h2>
+                <h2>Set <span class="set-text">{{exerciseSet}}</span> <span class="exercise-text">{{exercise}}</span></h2>
               </div>
               <div class="flex text-right">
                 <h4>Time Remaining: <simple-timer class="timer" start-time="120"></simple-timer></h4>
               </div>
             </div>
           </div>
-        </template
+        </template>
       </template>
     </div>
     
-
-    <paper-fab class="page-fab blue" icon="av:play-arrow" on-tap="start"></paper-fab>
-
   </template>
 
   <script>
@@ -67,6 +69,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'benchmark-page',
       properties: {
         exercises: {
+          type: Array,
+          value: []
+        },
+
+        _exercisesCopy: {
           type: Array,
           value: ['pullups', 'pushups', 'blue balls']
         },
@@ -76,7 +83,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 120,
         },
 
-        sets: {
+        exerciseSets: {
+          type: Array,
+          value: []
+        },
+
+        _exerciseSetsCopy: {
           type: Array,
           value: [1,2,3]
         }
@@ -84,15 +96,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       start: function() {
         this._container = this.$.exercises;
-        this._nextCard();
+
+        this.$.intro.setAttribute('swiped-card', '');
+        this.$.startButton.setAttribute('swiped-down', '');
+        this.async(this._removeIntroCard, 350);
       },
 
       _removeIntroCard: function() {
-        Polymer.dom(this._container).removeChild(this.$.intro);
+        this.$.intro.setAttribute('hidden', '');
+        this.$.startButton.setAttribute('hidden', '');
+
+        this.set('exercises', _.clone(this._exercisesCopy));
+        this.set('exerciseSets', _.clone(this._exerciseSetsCopy));
+        this.$.exercisesList.render();
+        this._nextCard();
       },
 
       _nextCard: function() {
-        this._currentCard = Polymer.dom(this._container).querySelector('.card');
+        this._currentCard = Polymer.dom(this._container).querySelector('.exercise-card');
         if (this._currentCard) {
           this.addEventListener('simple-timer-end', this._swipeCard); 
           this.timer = Polymer.dom(this._currentCard).querySelector('.timer');
@@ -101,7 +122,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._currentCard.setAttribute('timer-started', '');
           this.timer.start();
         } else {
-
+          this.$.intro.removeAttribute('hidden');
+          this.$.startButton.removeAttribute('hidden');
+          this.$.intro.removeAttribute('swiped-card');
+          this.$.startButton.removeAttribute('swiped-down');
         }
       },
 
@@ -112,8 +136,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _removeCard: function() {
+        var exercise = this._currentCard.querySelector('.exercise-text').innerHTML;
+        var set = this._currentCard.querySelector('.set-text').innerHTML;
+        this.splice('exercises', this.exercises.indexOf(exercise), 1);
+        this.splice('exerciseSets', this.exerciseSets.indexOf(set), 1);
         Polymer.dom(this._container).removeChild(this._currentCard);
         this._nextCard();
+      },
+
+      _getDateStamp: function() {
+        var dateStamp = new Date();
+        var month = dateStamp.getMonth() + 1;
+        return dateStamp.getFullYear() + '-' + month + "-" + dateStamp.getDate();
       }
 
     });
