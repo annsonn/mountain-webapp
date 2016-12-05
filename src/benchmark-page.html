@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="card exercise-card">
           <div class="layout horizontal">
             <div class="flex">
-              <h2>Set <span class="set-text">{{exerciseSet}}</span> <span class="exercise-text">Rest</span></h2>
+              <h2>Rest</h2>
             </div>
             <div class="flex text-right">
               <h4>Time Remaining: <simple-timer class="timer" start-time="[[restInterval]]"></simple-timer></h4>
@@ -80,7 +80,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="card exercise-record">
           <template is="dom-repeat" items="{{exercises}}" as="exercise">
-            <paper-input class="set-{{exerciseSet}}-exercises" exercise="{{exercise}}" label="Set {{exerciseSet}}: {{exercise}}" type="number"></paper-input>
+            <div exercise$="[[exercise]]" set$="[[exerciseSet]]" class="record">
+              <paper-input label="Set {{exerciseSet}}: {{exercise}}" type="number"></paper-input>
+            </div>
           </template>
         </div>
       </template>
@@ -141,7 +143,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       reset: function() {
-        // record to firebase
+        this._recordBenchmarkScore();
         this.set('exercises', []);
         this.set('exerciseSets', []);
         this.$.saveButton.setAttribute('hidden', '');
@@ -150,6 +152,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.startButton.removeAttribute('hidden');
         this.$.intro.removeAttribute('swiped-card');
         this.$.startButton.removeAttribute('swiped-down');
+      },
+
+      _recordBenchmarkScore: function() {
+        var records = this.$.exercises.querySelectorAll('.exercise-record');
+
+        var data = {
+          date: this._getDateStamp(),
+          score: 0
+        };
+
+        var score = 0;
+
+        _.forEach(records, function(setRecords) {
+          var inputs = setRecords.querySelectorAll('.record');
+          if (inputs.length > 0) {
+            var setNumber = inputs[0].attributes.set.value;
+            var setData = {};
+            _.forEach(inputs, function(input) {
+              var inputField = input.querySelector('paper-input');
+              setData[input.attributes.exercise.value] = inputField.value;
+              data.score += parseInt(inputField.value);
+            })
+            data[setNumber] = setData;
+          }
+        });
+        
+        this.$.query.ref.push(data);
       }
 
     });

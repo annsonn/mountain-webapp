@@ -24,11 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
-    <firebase-query
-                id="query"
-                path="/users/[[user.uid]]/circuits"
-                data="{{circuits}}">
-    </firebase-query>
+    <firebase-query path="/users/[[user.uid]]/circuits" data="{{circuits}}"></firebase-query>
+    <firebase-query path="/users/[[user.uid]]/benchmarks" data="{{benchmarks}}"></firebase-query>
+
 
     <div class="card">
       <h1>Home</h1>
@@ -36,6 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <h2>Benchmarks</h2>
+      <ul>
+        <template is="dom-repeat" items="{{benchmarks}}" as="benchmark">
+          <li>{{benchmark.date}} - {{benchmark.score}}</li>
+        </template>
+      </ul>
     </div>
 
     <div class="card">
