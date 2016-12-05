@@ -94,6 +94,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _done: function() {
+        this.$.intro.removeAttribute('hidden');
+        this.$.startButton.removeAttribute('hidden');
+        this.$.intro.removeAttribute('swiped-card');
+        this.$.startButton.removeAttribute('swiped-down');
         this.set('excerises', []);
         this.$.query.ref.push({
           date: this._getDateStamp()

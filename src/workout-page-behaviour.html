@@ -39,10 +39,6 @@
         this._currentCard.setAttribute('timer-started', '');
         this.timer.start();
       } else {
-        this.$.intro.removeAttribute('hidden');
-        this.$.startButton.removeAttribute('hidden');
-        this.$.intro.removeAttribute('swiped-card');
-        this.$.startButton.removeAttribute('swiped-down');
         this._done();
       }
     },

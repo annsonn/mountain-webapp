@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/simple-timer/simple-timer.html">
@@ -61,7 +62,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
           </div>
         </template>
+
+        <div class="card exercise-record">
+          <template is="dom-repeat" items="{{exercises}}" as="exercise">
+            <paper-input id="set-{{exerciseSet}}-exercise" label="Set {{exerciseSet}}: {{exercise}}" required auto-validate type="number"></paper-input>
+          </template>
+        </div>
       </template>
+
+      <div class="layout horizontal">
+        <paper-button swiped-card hidden id="saveButton" class="blue flex" raised on-tap="reset">Save</paper-button>
+      </div>
     </div>
     
   </template>
@@ -85,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         interval: {
           type: Number,
-          value: 120
+          value: 1
         },
 
         exerciseSets: {
@@ -105,9 +116,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _done: function() {
+        this.$.saveButton.removeAttribute('hidden');
+        this.$.saveButton.removeAttribute('swiped-card');
+      },
+
+      reset: function() {
         this.set('exercises', []);
         this.set('exerciseSets', []);
-        console.log('done benchmark!');
+        this.$.saveButton.setAttribute('hidden', '');
+        this.$.intro.setAttribute('swiped-card', '');
+        this.$.intro.removeAttribute('hidden');
+        this.$.startButton.removeAttribute('hidden');
+        this.$.intro.removeAttribute('swiped-card');
+        this.$.startButton.removeAttribute('swiped-down');
+        // hide done button and record to firebase
       }
 
     });
