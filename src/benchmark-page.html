@@ -36,6 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #startButton[swiped-down] {
         transform: translateY(1000%);
       }
+
+      .exercise-record .floated-label-placeholder {
+          text-transform: capitalize;
+      }
     </style>
 
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
@@ -63,9 +67,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </template>
 
+        <div class="card exercise-card">
+          <div class="layout horizontal">
+            <div class="flex">
+              <h2>Set <span class="set-text">{{exerciseSet}}</span> <span class="exercise-text">Rest</span></h2>
+            </div>
+            <div class="flex text-right">
+              <h4>Time Remaining: <simple-timer class="timer" start-time="[[restInterval]]"></simple-timer></h4>
+            </div>
+          </div>
+        </div>
+
         <div class="card exercise-record">
           <template is="dom-repeat" items="{{exercises}}" as="exercise">
-            <paper-input id="set-{{exerciseSet}}-exercise" label="Set {{exerciseSet}}: {{exercise}}" required auto-validate type="number"></paper-input>
+            <paper-input class="set-{{exerciseSet}}-exercises" exercise="{{exercise}}" label="Set {{exerciseSet}}: {{exercise}}" type="number"></paper-input>
           </template>
         </div>
       </template>
@@ -91,10 +106,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _exercisesCopy: {
           type: Array,
-          value: ['pullups', 'pushups', 'blue balls']
+          value: ['Pullups', 'Pushups', 'Blue Balls']
         },
 
         interval: {
+          type: Number,
+          value: 1
+        },
+
+        restInterval: {
           type: Number,
           value: 1
         },
@@ -121,6 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       reset: function() {
+        // record to firebase
         this.set('exercises', []);
         this.set('exerciseSets', []);
         this.$.saveButton.setAttribute('hidden', '');
@@ -129,7 +150,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.startButton.removeAttribute('hidden');
         this.$.intro.removeAttribute('swiped-card');
         this.$.startButton.removeAttribute('swiped-down');
-        // hide done button and record to firebase
       }
 
     });
