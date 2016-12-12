@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
     <firebase-query path="/users/[[user.uid]]/circuits" data="{{circuits}}"></firebase-query>
     <firebase-query path="/users/[[user.uid]]/benchmarks" data="{{benchmarks}}"></firebase-query>
-    <firebase-query path="/users/[[user.uid]]/finger-training" data="{fingerTraining}"></firebase-query>
+    <firebase-query path="/users/[[user.uid]]/campus" data="{{campus}}"></firebase-query>
 
 
     <div class="card">
@@ -48,14 +48,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
     <div class="card">
-      <h2>Finger Training</h2>
+      <h2>Campus Training</h2>
       <ul>
-        <template is="dom-repeat" items="{{fingerTraining}}" as="finger">
+        <template is="dom-repeat" items="{{campus}}" as="campusSession">
           <li>
-            <h4>{{finger.date}}</h4>
+            <h4>{{campusSession.date}}</h4>
             <ul>
-              <template is="dom-repeat" items="{{finger.exercises}}" as="exercise">
-                <li>{{exercise}} - {{finger[exercise]}}</li>
+              <template is="dom-repeat" items="{{campusSession.exercises}}" as="exercise">
+                <!-- get all the keys from exercises and then show the top ones -->
               </template>
             </ul>
           </li>
