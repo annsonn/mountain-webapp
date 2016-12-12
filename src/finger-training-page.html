@@ -1,0 +1,145 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="lodash.html">
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="finger-training-page">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      #startButton {
+        transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #startButton[swiped-down] {
+        transform: translateY(1000%);
+      }
+
+      .exercise-record .floated-label-placeholder {
+          text-transform: capitalize;
+      }
+    </style>
+
+    <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
+    <firebase-query id="query" path="/users/[[user.uid]]/finger-training" data="{fingerTraining}"></firebase-query>
+    
+    <div id="exercises">
+      <template id="exercisesList" is="dom-repeat" items="{{exercises}}" as="exercise">
+        <div class="card exercise-record">
+          <template  is="dom-repeat" items="{{exerciseSets}}" as="exerciseSet">
+            <div exercise$="[[exercise]]" set$="[[exerciseSet]]" class="record">
+              <paper-input label="Set {{exerciseSet}}: {{exercise}}" type="number"></paper-input>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <div class="layout horizontal">
+        <paper-button id="saveButton" class="blue flex" raised on-tap="reset">Save</paper-button>
+      </div>
+    </div>
+    
+  </template>
+
+  <script>
+    Polymer({
+      is: 'finger-training-page',
+      properties: {
+        exercises: {
+          type: Array,
+          value: []
+        },
+
+        exerciseSets: {
+          type: Array,
+          value: []
+        },
+
+        _exercisesCopy: {
+          type: Array,
+          value: ['Ladder Up', 'Lock Offs', 'Ladder Skip Up']
+        },
+
+        _exerciseSetsCopy: {
+          type: Array,
+          value: [1,2,3]
+        }
+
+      },
+
+      ready: function() {
+        console.log('ready!');
+        this._start();
+      },
+
+      _start: function() {
+        this.exercises = _.clone(this._exercisesCopy);
+        this.exerciseSets = _.clone(this._exerciseSetsCopy);
+        this.$.exercisesList.render();
+      },
+
+      reset: function() {
+        this._recordScores();
+        this._start();
+      },
+
+      _recordScores: function() {
+        var records = this.$.exercises.querySelectorAll('.exercise-record');
+
+        var data = {
+          date: this._getDateStamp(),
+          exercises: []
+        };
+
+        _.forEach(records, function(setRecords) {
+          var inputs = setRecords.querySelectorAll('.record');
+          if (inputs.length > 0) {
+            _.forEach(inputs, function(input) {
+              var inputField = input.querySelector('paper-input');
+              var re = new RegExp(' ', 'g');
+
+              var key = input.attributes.exercise.value.replace(re, '-').toLowerCase();
+              if (!data.exercises[key]) {
+                data.exercises[key] = [];
+              }
+              data.exercises[key].push(inputField.value);
+
+              if(!data[key] || data[key] < parseInt(inputField.value)) {
+                data[key] = parseInt(inputField.value);
+              }
+            })
+          }
+        });
+
+        console.log(data);
+        this.$.query.ref.push(data);
+      },
+
+      _getDateStamp: function() {
+        var dateStamp = new Date();
+        var month = dateStamp.getMonth() + 1;
+        return dateStamp.getFullYear() + '-' + month + "-" + dateStamp.getDate();
+      }
+    });
+  </script>
+</dom-module>

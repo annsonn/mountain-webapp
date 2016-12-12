@@ -85,8 +85,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <mountain-auth id="auth" user="{{user}}"></mountain-auth>
 
-    
-
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -102,6 +100,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="home" href="/home"><iron-icon icon="home"></iron-icon> Home</a>
           <a name="benchmark" href="/benchmark"><iron-icon icon="accessibility"></iron-icon> Benchmark</a>
           <a name="circuit" href="/circuit"><iron-icon icon="places:fitness-center"></iron-icon> Circuit</a>
+          <a name="finger-training" href="/finger-training"><iron-icon icon="places:fitness-center"></iron-icon> Finger Training</a>
+          <hr/>
           <a on-tap="signout"><iron-icon icon="exit-to-app"></iron-icon> Sign Out</a>
         </iron-selector>
       </app-drawer>
@@ -122,8 +122,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="error"
             role="main">
           <home-page name="home"></home-page>
-          <benchmark-page training-data="{{trainingData}}" name="benchmark"></benchmark-page>
+          <benchmark-page name="benchmark"></benchmark-page>
           <circuit-page name="circuit"></circuit-page>
+          <finger-training-page name="finger-training"></finger-training-page>
           <error-page name="error"></error-page>
         </iron-pages>
       </app-header-layout>
@@ -139,10 +140,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
-        },
-        trainingData: {
-          type: Object,
-          observer: '_dataChanged'
         }
       },
 
@@ -162,10 +159,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl(page + '-page.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
-
-      _dataChanged: function(trainingData) {
-        console.log(trainingData);
       },
 
       _showPage404: function() {

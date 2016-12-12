@@ -26,6 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
     <firebase-query path="/users/[[user.uid]]/circuits" data="{{circuits}}"></firebase-query>
     <firebase-query path="/users/[[user.uid]]/benchmarks" data="{{benchmarks}}"></firebase-query>
+    <firebase-query path="/users/[[user.uid]]/finger-training" data="{fingerTraining}"></firebase-query>
+
 
     <div class="card">
       <h2>Benchmarks</h2>
@@ -43,6 +45,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <li>{{circuit.date}}</li>
         </template>
       </ul>
+    </div>
+
+    <div class="card">
+      <h2>Finger Training</h2>
+      <ul>
+        <template is="dom-repeat" items="{{fingerTraining}}" as="finger">
+          <li>
+            <h4>{{finger.date}}</h4>
+            <ul>
+              <template is="dom-repeat" items="{{finger.exercises}}" as="exercise">
+                <li>{{exercise}} - {{finger[exercise]}}</li>
+              </template>
+            </ul>
+          </li>
+        </template>
     </div>
 
   </template>
