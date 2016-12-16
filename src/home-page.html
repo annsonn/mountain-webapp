@@ -10,8 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lodash.html">
 
 <dom-module id="home-page">
   <template>
@@ -21,30 +25,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+      google-chart {
+        height: 300px;
+        width: 100%;
+      }
     </style>
 
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
-    <firebase-query path="/users/[[user.uid]]/circuits" data="{{circuits}}"></firebase-query>
-    <firebase-query path="/users/[[user.uid]]/benchmarks" data="{{benchmarks}}"></firebase-query>
+    <firebase-document path="/users/[[user.uid]]/circuits" data="{{circuitData}}"></firebase-document>
+    <firebase-document path="/users/[[user.uid]]/benchmarks" data="{{benchmarkData}}"></firebase-document>
     <firebase-query path="/users/[[user.uid]]/campus" data="{{campus}}"></firebase-query>
 
 
     <div class="card">
       <h2>Benchmarks</h2>
       <ul>
-        <template is="dom-repeat" items="{{benchmarks}}" as="benchmark">
-          <li>{{benchmark.date}} - {{benchmark.score}}</li>
-        </template>
+        <google-chart
+          type='line'
+          cols='[{"label":"Date", "type":"string"}, {"label":"Score", "type":"number"}]'
+          rows='{{benchmarkGraphData}}'>
+        </google-chart>
       </ul>
     </div>
 
     <div class="card">
       <h2>Circuit Training</h2>
-      <ul>
-        <template is="dom-repeat" items="{{circuits}}" as="circuit">
-          <li>{{circuit.date}}</li>
-        </template>
-      </ul>
+
+      <google-chart
+        type='column'
+        cols='[{"label":"Date", "type":"string"}, {"label":"Repetitions", "type":"number"}]'
+        rows='{{circuitGraphData}}'>
+      </google-chart>
     </div>
 
     <div class="card">
@@ -66,7 +78,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-      is: 'home-page'
+      is: 'home-page',
+      properties: {
+        benchmarkData: {
+          value: Array,
+          observer: 'benchmarkDataChanged'
+        },
+        benchmarkGraphData: {
+          type: Array
+        },
+        circuitData: {
+          value: Array,
+          observer: 'circuitDataChanged'
+        },
+        circuitGraphData: {
+          type: Array,
+        }
+      },
+
+      benchmarkDataChanged: function(newData) {
+        var result = [];
+        _.forEach(newData, function(dataEntry) {
+          if (dataEntry.date && dataEntry.score && typeof(dataEntry.score) === 'number') {
+            result.push([dataEntry.date, dataEntry.score])
+          }
+        })
+        this.benchmarkGraphData = result;
+      },
+
+      circuitDataChanged: function(newData) {
+        var result = [];
+        _.forEach(_.countBy(newData, 'date'), function(value, key) {
+          result.push([key, value]);
+        })
+        this.circuitGraphData = result;
+      }
     });
   </script>
 </dom-module>
