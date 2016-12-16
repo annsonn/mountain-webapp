@@ -11,8 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
-
 <link rel="import" href="../bower_components/google-chart/google-chart.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="lodash.html">
@@ -35,23 +33,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
     <firebase-document path="/users/[[user.uid]]/circuits" data="{{circuitData}}"></firebase-document>
     <firebase-document path="/users/[[user.uid]]/benchmarks" data="{{benchmarkData}}"></firebase-document>
-    <firebase-query path="/users/[[user.uid]]/campus" data="{{campus}}"></firebase-query>
+    <firebase-document path="/users/[[user.uid]]/campus" data="{{campusData}}"></firebase-document>
 
 
     <div class="card">
       <h2>Benchmarks</h2>
-      <ul>
-        <google-chart
-          type='line'
-          cols='[{"label":"Date", "type":"string"}, {"label":"Score", "type":"number"}]'
-          rows='{{benchmarkGraphData}}'>
-        </google-chart>
-      </ul>
+      <google-chart
+        type='line'
+        cols='[{"label":"Date", "type":"string"}, {"label":"Score", "type":"number"}]'
+        rows='{{benchmarkGraphData}}'>
+      </google-chart>
     </div>
 
     <div class="card">
       <h2>Circuit Training</h2>
-
       <google-chart
         type='column'
         cols='[{"label":"Date", "type":"string"}, {"label":"Repetitions", "type":"number"}]'
@@ -61,17 +56,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <h2>Campus Training</h2>
-      <ul>
-        <template is="dom-repeat" items="{{campus}}" as="campusSession">
-          <li>
-            <h4>{{campusSession.date}}</h4>
-            <ul>
-              <template is="dom-repeat" items="{{campusSession.exercises}}" as="exercise">
-                <!-- get all the keys from exercises and then show the top ones -->
-              </template>
-            </ul>
-          </li>
-        </template>
+      <google-chart
+        type="combo"
+        options='{"seriesType": "bars", "series": {"3": {"type": "line"}}}'
+        data='[["Day", "Ladder Up", "Lock Offs", "Ladder Skip Up", "Average"], {{campusGraphData}}]'>
+      </google-chart>
     </div>
 
   </template>
@@ -82,21 +71,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         benchmarkData: {
           value: Array,
-          observer: 'benchmarkDataChanged'
+          observer: '_benchmarkDataChanged'
         },
         benchmarkGraphData: {
           type: Array
         },
         circuitData: {
           value: Array,
-          observer: 'circuitDataChanged'
+          observer: '_circuitDataChanged'
         },
         circuitGraphData: {
           type: Array,
+        },
+        campusData: {
+          value: Array,
+          observer: '_campusDataChanged'
+        },
+        campusGraphData: {
+          value: Array
         }
       },
 
-      benchmarkDataChanged: function(newData) {
+      _benchmarkDataChanged: function(newData) {
         var result = [];
         _.forEach(newData, function(dataEntry) {
           if (dataEntry.date && dataEntry.score && typeof(dataEntry.score) === 'number') {
@@ -106,12 +102,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.benchmarkGraphData = result;
       },
 
-      circuitDataChanged: function(newData) {
+      _circuitDataChanged: function(newData) {
         var result = [];
         _.forEach(_.countBy(newData, 'date'), function(value, key) {
           result.push([key, value]);
         })
         this.circuitGraphData = result;
+      },
+
+      _campusDataChanged: function(newData) {
+        console.log('_campusDataChanged', newData);
+        var result= [];
+
+        this.campusGraphData = result;
       }
     });
   </script>
