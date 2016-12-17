@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
     <firebase-document path="/users/[[user.uid]]/circuits" data="{{circuitData}}"></firebase-document>
     <firebase-document path="/users/[[user.uid]]/benchmarks" data="{{benchmarkData}}"></firebase-document>
-    <firebase-document path="/users/[[user.uid]]/campus" data="{{campusData}}"></firebase-document>
+    <firebase-document path="/users/[[user.uid]]/finger-training" data="{{campusData}}"></firebase-document>
 
 
     <div class="card">
@@ -58,8 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h2>Campus Training</h2>
       <google-chart
         type="combo"
-        options='{"seriesType": "bars", "series": {"3": {"type": "line"}}}'
-        data='[["Day", "Ladder Up", "Lock Offs", "Ladder Skip Up", "Average"], {{campusGraphData}}]'>
+        options='{"seriesType": "", "series": {"1": {"type": "line"}, "2": {"type": "line"}, "3": {"type": "line"}}}'
+        data='{{campusGraphData}}'>
       </google-chart>
     </div>
 
@@ -111,9 +111,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _campusDataChanged: function(newData) {
-        console.log('_campusDataChanged', newData);
-        var result= [];
-
+        var result= [["Day", "Ladder Up", "Lock Offs", "Ladder Skip Up"]];
+        _.forEach(newData, function(dataEntry){
+          result.push([dataEntry.date, dataEntry['ladder-up'], dataEntry['lock-offs'], dataEntry['ladder-skip-up']]);
+        });
         this.campusGraphData = result;
       }
     });
