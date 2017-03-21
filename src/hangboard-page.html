@@ -1,0 +1,123 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/simple-timer/simple-timer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="lodash.html">
+<link rel="import" href="workout-page-behaviour.html">
+
+<dom-module id="hangboard-page">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      .exercise-text {
+        font-size: 20px;
+      }
+
+      #startButton {
+        transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #startButton[swiped-down] {
+        transform: translateY(1000%);
+      }
+    </style>
+
+    <firebase-auth id="auth" user="{{user}}" provider="google" status-known="{{statusKnown}}"></firebase-auth>
+    <firebase-query
+                id="query"
+                path="/users/[[user.uid]]/circuits"
+                data="{{circuits}}">
+    </firebase-query>
+
+    <div id="exercises"> 
+      <div id="intro" class="card">
+        <p>Begin and complete the task or tasks within the one minute intervals. Use the remaining time to rest. Hang a watch from the bottom of the board or mount a wall clock so that you can look straight at it while training.</p>
+        <p>It is recommended that you do this circuit at least twice!</p>
+      </div>
+      <div class="layout horizontal">
+        <paper-button id="startButton" class="blue flex" raised on-tap="start">START</paper-button>
+      </div>
+      <template id="exercisesList" is="dom-repeat" items="{{exercises}}" as="exercise">
+        <div class="card exercise-card">
+          <div class="layout horizontal">
+            <div class="flex">
+              <h2 class="exercise-text">{{exercise}}</h2>
+            </div>
+            <div class="flex text-right">
+              <h4>Time Remaining: <simple-timer class="timer" start-time="{{interval}}"></simple-timer></h4>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'hangboard-page',
+      behaviors: [
+        Polymer.WorkoutPageBehaviour
+      ],
+      properties: {
+        exercises: {
+          type: Array,
+          value: []
+        },
+        _exercisesCopy: {
+          type: Array,
+          value: [
+            '15 second hang, Jug', 
+            '1 pull-up, Round Sloper', 
+            '10 second hang, Medium Edge',
+            '15 second hang w/ 3 shrugs, Pocket',
+            '20 second hang w/ 2 pull-ups, Large Edge',
+            '10 second hang, Round Sloper & 5 knee raises, Pocket',
+            '4 pull-ups, Large Edge',
+            '10 second hang, Medium Edge',
+            '3 pull-ups, Jug',
+            'Hang as long as you can, Round Sloper'
+            ]
+        },
+        interval: {
+          type: Number,
+          value: 60
+        }
+      },
+
+      _setExercises: function() {
+        this.set('exercises', _.clone(this._exercisesCopy));
+      },
+
+      _done: function() {
+        this.$.intro.removeAttribute('hidden');
+        this.$.startButton.removeAttribute('hidden');
+        this.$.intro.removeAttribute('swiped-card');
+        this.$.startButton.removeAttribute('swiped-down');
+        this.set('excerises', []);
+        this.$.query.ref.push({
+          date: this._getDateStamp()
+        })
+      }
+
+    });
+  </script>
+</dom-module>

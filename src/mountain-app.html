@@ -98,6 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>Welcome [[user.displayName]]</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home" href="/home"><iron-icon icon="home"></iron-icon> Home</a>
+          <a name="hangboard" href="/hangboard"><iron-icon icon="places:fitness-center"></iron-icon> Hangboard</a>
           <a name="benchmark" href="/benchmark"><iron-icon icon="accessibility"></iron-icon> Benchmark</a>
           <a name="circuit" href="/circuit"><iron-icon icon="places:fitness-center"></iron-icon> Circuit</a>
           <a name="campus" href="/campus"><iron-icon icon="places:fitness-center"></iron-icon> Campus Training</a>
@@ -122,6 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="error"
             role="main">
           <home-page name="home"></home-page>
+          <hangboard-page name="hangboard"></hangboard-page>
           <benchmark-page name="benchmark"></benchmark-page>
           <circuit-page name="circuit"></circuit-page>
           <campus-page name="campus"></campus-page>
