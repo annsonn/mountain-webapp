@@ -65,12 +65,12 @@
                 <div class="layout horizontal" style="margin-top: 15px">
                     <paper-button class="flex" raised on-tap="signIn">Sign In/Create</paper-button>
                 </div>
-                <!--<div class="google-sign-in"
+                <div class="google-sign-in"
                      tabindex="0"
                      on-tap="googleSignIn">
                     <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
-                </div>-->
+                </div>
             </div>
         </paper-dialog>
     </template>
@@ -109,11 +109,11 @@
                         .catch(this.handleError);
                 },
 
-                // googleSignIn: function() {
-                //     this.$.auth.signInWithPopup()
-                //         .then(this.handleSuccess)
-                //         .catch(this.handleError);
-                // },
+                googleSignIn: function() {
+                    this.$.auth.signInWithPopup()
+                        .then(this.handleSuccess)
+                        .catch(this.handleError);
+                },
 
                 handleSuccess: function(response) {
                     // successful authentication response here
