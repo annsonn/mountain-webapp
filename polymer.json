@@ -5,7 +5,8 @@
     "src/home-page.html",
     "src/benchmark-page.html",
     "src/circuit-page.html",
-    "src/error-page.html"
+    "src/error-page.html",
+    "src/hangboard-page.html"
   ],
   "sourceGlobs": [
    "src/**/*",
