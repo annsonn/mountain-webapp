@@ -52,6 +52,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="intro" class="card">
         <p>Begin and complete the task or tasks within the one minute intervals. Use the remaining time to rest. Hang a watch from the bottom of the board or mount a wall clock so that you can look straight at it while training.</p>
         <p>It is recommended that you do this circuit at least twice!</p>
+        <p>Here are the following exercises: </p>
+        <ul>
+          <template id="list" is="dom-repeat" items="{{exerciseList}}" as="exercise">
+            <li>{{exercise}}</li>
+          </template>
+        </ul> 
       </div>
       <div class="layout horizontal">
         <paper-button id="startButton" class="blue flex" raised on-tap="start">START</paper-button>
@@ -82,6 +88,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array,
           value: []
         },
+        exerciseList: {
+          type: Array,
+          value: []
+        },
         _exercisesCopy: {
           type: Array,
           value: [
@@ -101,6 +111,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           value: 60
         }
+      },
+
+      ready: function() {
+        this.set('exerciseList', _.clone(this._exercisesCopy));
       },
 
       _setExercises: function() {

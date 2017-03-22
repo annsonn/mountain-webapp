@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "mountain-training-a04c4",
-    "mountain-training": "mountain-training-a04c4"
+    "mountain-training": "mountain-training-a04c4",
+    "staging": "mountain-training-a04c4"
   }
 }
